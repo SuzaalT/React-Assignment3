@@ -7,23 +7,36 @@ function DeckofCard() {
   const deck = [];
 
   //Deck of Cards
-  for (let i = 0; i < 4; i++) {
-    for (let j = 0; j < 13; j++) {
+  for (let i = 0; i < suits.length; i++) {
+    for (let j = 0; j < values.length; j++) {
       deck.push(values[j] + suits[i]);
     }
   }
+  const [deckOfCards, setDeckOfCards] = useState(deck);
 
   const [selectedCard, setSelectedCard] = useState(null);
+  
+
+
 
   //Random Card Generator
-  const RandomCardGenerator = () => {
-    const randomIndex = Math.floor(Math.random() * deck.length);
-    setSelectedCard(deck[randomIndex]);
+  const randomCardGenerator = () => {
+    if(deckOfCards.length <= 0) return;
+    const randomIndex = Math.floor(Math.random() * deckOfCards.length); 
+    const card = deckOfCards[randomIndex];
+
+    setDeckOfCards((deckOfCards) => {
+      return deckOfCards.filter(c => c != card);
+    })
+
+    setSelectedCard(card);
   };
 
   return (
     <div className="deck-container">
-      <button onClick={RandomCardGenerator} >RandomCard</button>
+      <button onClick={randomCardGenerator}>RandomCard</button>
+
+      {deckOfCards.length <= 0 ? <p>No card Remaining</p> : <></>}
       {selectedCard && <p >You selected: {selectedCard}</p>}
     </div>
   );
