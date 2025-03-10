@@ -32,9 +32,12 @@ function DeckofCard() {
     const randomIndex = Math.floor(Math.random() * deckOfCards.length); 
     return deckOfCards[randomIndex];
   }
+
   
   //Random Card Generator
   const randomCardGenerator = () => {
+
+    setAllSelectedCards([]);
 
     const card = getRandomCardFromDeck();
     
@@ -46,10 +49,6 @@ function DeckofCard() {
     })
 
     setSelectedCard(card);
-
-    setAllSelectedCards(allSelectedCards => {
-      return [...allSelectedCards, card];
-    })
     
   };
 
@@ -61,7 +60,11 @@ function DeckofCard() {
 
     const cards = [];
     for (let i = 0; i < numOfCards; i++) {
-      cards.push(getRandomCardFromDeck())
+      const card = getRandomCardFromDeck();
+      cards.push(card);
+      setDeckOfCards((deckOfCards) => {
+        return deckOfCards.filter(c => c != card);
+      })
     }
 
     setAllSelectedCards([...cards])
@@ -72,6 +75,9 @@ function DeckofCard() {
       <button onClick={randomCardGenerator}>RandomCard</button>
       <button onClick={() => dealCards(5)}>Deal 5</button>
       <button onClick={() => dealCards(7)}>Deal 7</button>
+      <button onClick={() => {
+        setAllSelectedCards([]);
+      }}>Reset</button>
    
 
       {deckOfCards.length <= 0 ? <p>No card Remaining</p> : <></>}
