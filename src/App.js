@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./App.css";
 
+import Card from "./Card";
 
 const getWholeDeck = () => {
   const suits = ["♠", "♣", "♥", "♦"];
@@ -10,7 +11,10 @@ const getWholeDeck = () => {
   //Deck of Cards
   for (let i = 0; i < suits.length; i++) {
     for (let j = 0; j < values.length; j++) {
-      deck.push(values[j] + suits[i]);
+      deck.push({
+        suit: suits[i],
+        value: values[j]
+      });
     }
   }
 
@@ -37,7 +41,7 @@ function DeckofCard() {
   //Random Card Generator
   const randomCardGenerator = () => {
 
-    setAllSelectedCards([]);
+    if(!selectedCard) setAllSelectedCards([]);
 
     const card = getRandomCardFromDeck();
     
@@ -49,6 +53,11 @@ function DeckofCard() {
     })
 
     setSelectedCard(card);
+
+
+    setAllSelectedCards(selectedCards => {
+      return [...selectedCards, card];
+    });
     
   };
 
@@ -77,14 +86,16 @@ function DeckofCard() {
       <button onClick={() => dealCards(7)}>Deal 7</button>
       <button onClick={() => {
         setAllSelectedCards([]);
+        setSelectedCard(null);
       }}>Reset</button>
    
 
       {deckOfCards.length <= 0 ? <p>No card Remaining</p> : <></>}
-      {selectedCard && <p >You selected: {selectedCard}</p>}
+      {selectedCard && <p >You selected: <Card type={selectedCard}></Card></p>}
 
-
-      {allSelectedCards.map(c => <p>{c}</p>)}
+      <div className="card-container">
+        {allSelectedCards.map(c => <Card type={c}></Card>)}
+      </div>
     </div>
   );
 }
