@@ -42,20 +42,10 @@ function DeckofCard() {
   
   //Random Card Generator
   const randomCardGenerator = () => {
-
-    if(!selectedCard) {
-      setAllSelectedCards([]);
-      setPickedCard(null);
-    };
-
     const card = getRandomCardFromDeck();
     
     //no card in the deck
     if(!card) return null;
-
-    setDeckOfCards((deckOfCards) => {
-      return deckOfCards.filter(c => c != card);
-    })
 
     setSelectedCard(card);
 
