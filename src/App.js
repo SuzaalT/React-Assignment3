@@ -29,6 +29,8 @@ function DeckofCard() {
 
   const [allSelectedCards, setAllSelectedCards] = useState([]);
 
+  const [pickedCard, setPickedCard] = useState(null);
+
 
   const getRandomCardFromDeck = () => {
 
@@ -53,7 +55,7 @@ function DeckofCard() {
     })
 
     setSelectedCard(card);
-
+    setPickedCard(card);
 
     setAllSelectedCards(selectedCards => {
       return [...selectedCards, card];
@@ -76,25 +78,58 @@ function DeckofCard() {
       })
     }
 
+    setPickedCard(cards[cards.length - 1])
+
     setAllSelectedCards([...cards])
   }
 
+
+  const handlePickingCard = (clickedCard) => {
+    if(!pickedCard) {
+      pickedCard = clickedCard;
+      return;
+    }
+
+
+    //TODO: swap the cards places
+
+  }
+
+  const handleToss = () => {
+    setAllSelectedCards(allSelectedCards => {
+      return allSelectedCards.filter(c => c != pickedCard);
+    })
+    setDeckOfCards(deckOfCards => {
+      return [...deckOfCards, pickedCard];
+    })
+
+    setPickedCard(null);
+  }
+
   return (
-    <div className="deck-container">
-      <button onClick={randomCardGenerator}>RandomCard</button>
-      <button onClick={() => dealCards(5)}>Deal 5</button>
-      <button onClick={() => dealCards(7)}>Deal 7</button>
-      <button onClick={() => {
-        setAllSelectedCards([]);
-        setSelectedCard(null);
-      }}>Reset</button>
+    <div className="layout">
+      <div className="button-container">
+        <button onClick={randomCardGenerator}>RandomCard</button>
+        <button onClick={() => dealCards(5)}>Deal 5</button>
+        <button onClick={() => dealCards(7)}>Deal 7</button>
+        <button onClick={() => {
+          setAllSelectedCards([]);
+          setSelectedCard(null);
+        }}>Reset</button>
+        <button onClick={handleToss}>Toss</button>
+      </div>
+
    
 
       {deckOfCards.length <= 0 ? <p>No card Remaining</p> : <></>}
-      {selectedCard && <p >You selected: <Card type={selectedCard}></Card></p>}
+      {selectedCard && 
+        <div>
+          <p>You selected:</p>
+          <Card type={selectedCard}></Card>
+        </div>}
 
-      <div className="card-container">
-        {allSelectedCards.map(c => <Card type={c}></Card>)}
+      <div className="cards-container">
+        {allSelectedCards.map((c, i) => <Card key={i} picked={c === pickedCard} onClick={() => setPickedCard(c)} type={c}></Card>)}
       </div>
     </div>
   );
