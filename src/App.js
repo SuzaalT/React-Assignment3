@@ -53,13 +53,14 @@ function DeckofCard() {
     
   };
 
-  const deal5Cards = () => {
+  //Deal x Card Generator
+  const dealCards = (numOfCards) => {
     setSelectedCard(null);
     setDeckOfCards([...getWholeDeck()]);
     setAllSelectedCards([]);
 
     const cards = [];
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < numOfCards; i++) {
       cards.push(getRandomCardFromDeck())
     }
 
@@ -69,7 +70,8 @@ function DeckofCard() {
   return (
     <div className="deck-container">
       <button onClick={randomCardGenerator}>RandomCard</button>
-      <button onClick={deal5Cards}>Deal 5</button>
+      <button onClick={() => dealCards(5)}>Deal 5</button>
+      <button onClick={() => dealCards(7)}>Deal 7</button>
    
 
       {deckOfCards.length <= 0 ? <p>No card Remaining</p> : <></>}
