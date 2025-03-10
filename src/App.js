@@ -159,13 +159,17 @@ function DeckofCard() {
       {selectedCard && 
         <div>
           <p>You selected:</p>
-          <Card suit={selectedCard.suit} value={selectedCard.value} picked={true}></Card>
+          <Card suit={selectedCard.suit} value={selectedCard.value}></Card>
         </div>}
-      <div className="cards-container">
-        {allSelectedCards.map((c, i) => 
-          <Card key={i} picked={c === pickedCard} onClick={() => handlePickingCard(c)} suit={c.suit} value={c.value}></Card>
-        )}
+      <div className="deck-container">
+        <h2>Selected Cards Deck</h2>
+        <div className="cards-container">
+          {allSelectedCards.map((c, i) => 
+            <Card key={i} picked={c === pickedCard} onClick={() => handlePickingCard(c)} suit={c.suit} value={c.value}></Card>
+          )}
+        </div>
       </div>
+
     </div>
   );
 }
