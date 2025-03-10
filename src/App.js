@@ -43,7 +43,10 @@ function DeckofCard() {
   //Random Card Generator
   const randomCardGenerator = () => {
 
-    if(!selectedCard) setAllSelectedCards([]);
+    if(!selectedCard) {
+      setAllSelectedCards([]);
+      setPickedCard(null);
+    };
 
     const card = getRandomCardFromDeck();
     
@@ -55,7 +58,6 @@ function DeckofCard() {
     })
 
     setSelectedCard(card);
-    setPickedCard(card);
 
     setAllSelectedCards(selectedCards => {
       return [...selectedCards, card];
@@ -65,6 +67,7 @@ function DeckofCard() {
 
   //Deal x Card Generator
   const dealCards = (numOfCards) => {
+    setPickedCard(null);
     setSelectedCard(null);
     setDeckOfCards([...getWholeDeck()]);
     setAllSelectedCards([]);
@@ -78,20 +81,29 @@ function DeckofCard() {
       })
     }
 
-    setPickedCard(cards[cards.length - 1])
-
     setAllSelectedCards([...cards])
   }
 
 
   const handlePickingCard = (clickedCard) => {
     if(!pickedCard) {
-      pickedCard = clickedCard;
+      setPickedCard(clickedCard);
       return;
     }
 
 
-    //TODO: swap the cards places
+    //swap cards
+    setAllSelectedCards(allSelectedCards => {
+      const clickedCardIndex = allSelectedCards.findIndex(c => c === clickedCard);
+      const pickedCardIndex = allSelectedCards.findIndex(c => c === pickedCard);
+  
+      if (clickedCardIndex === -1 || pickedCardIndex === -1) return allSelectedCards;
+  
+      const newCards = [...allSelectedCards];
+      [newCards[clickedCardIndex], newCards[pickedCardIndex]] = [newCards[pickedCardIndex], newCards[clickedCardIndex]];
+  
+      return newCards;
+  });
 
   }
 
@@ -106,10 +118,19 @@ function DeckofCard() {
     setPickedCard(null);
   }
 
+  const handleRegroup = () => {
+    setAllSelectedCards(allSelectedCards => {
+      const shuffledCards = [...allSelectedCards]
+          .sort(() => Math.random() - 0.5);
+  
+      return shuffledCards;
+  });
+  }
+
   return (
     <div className="layout">
       <div className="button-container">
-        <button onClick={randomCardGenerator}>RandomCard</button>
+        <button onClick={randomCardGenerator}>WildCard</button>
         <button onClick={() => dealCards(5)}>Deal 5</button>
         <button onClick={() => dealCards(7)}>Deal 7</button>
         <button onClick={() => {
@@ -117,6 +138,7 @@ function DeckofCard() {
           setSelectedCard(null);
         }}>Reset</button>
         <button onClick={handleToss}>Toss</button>
+        <button onClick={handleRegroup}>Regroup</button>
       </div>
 
    
@@ -129,7 +151,7 @@ function DeckofCard() {
         </div>}
 
       <div className="cards-container">
-        {allSelectedCards.map((c, i) => <Card key={i} picked={c === pickedCard} onClick={() => setPickedCard(c)} type={c}></Card>)}
+        {allSelectedCards.map((c, i) => <Card key={i} picked={c === pickedCard} onClick={() => handlePickingCard(c)} type={c}></Card>)}
       </div>
     </div>
   );
