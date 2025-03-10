@@ -139,9 +139,11 @@ function DeckofCard() {
           <p>You selected:</p>
           <Card type={selectedCard}></Card>
         </div>}
-      {!selectedCard && <Card type={{suit: "", value: "Card"}} />}
+      {!selectedCard && <Card suit="" value="Card" />}
       <div className="cards-container">
-        {allSelectedCards.map((c, i) => <Card key={i} picked={c === pickedCard} onClick={() => handlePickingCard(c)} type={c}></Card>)}
+        {allSelectedCards.map((c, i) => 
+          <Card key={i} picked={c === pickedCard} onClick={() => handlePickingCard(c)} suit={c.suit} value={c.value}></Card>
+        )}
       </div>
     </div>
   );

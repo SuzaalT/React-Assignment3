@@ -2,13 +2,13 @@ import React from 'react'
 
 import "./Card.css"
 
-const Card = ({type, picked = false, onClick}) => {
+const Card = ({suit, value, picked = false, onClick}) => {
   return (
     <div onClick={onClick} className={picked ? "card picked" : "card"}>
-        <div className="top-left">{type.suit}</div>
-        <div className="suit">{type.suit}</div>
-        <div className="value">{type.value}</div>
-        <div className="bottom-right">{type.suit}</div>
+        <div className="top-left">{suit}</div>
+        <div className="suit">{suit}</div>
+        <div className="value">{value}</div>
+        <div className="bottom-right">{suit}</div>
     </div>
   )
 }
