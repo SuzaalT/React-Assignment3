@@ -41,7 +41,7 @@ function DeckofCard() {
 
   
   //Random Card Generator
-  const randomCardGenerator = () => {
+  const handleWildCard = () => {
     const card = getRandomCardFromDeck();
     
     //no card in the deck
@@ -110,17 +110,36 @@ function DeckofCard() {
 
   const handleRegroup = () => {
     setAllSelectedCards(allSelectedCards => {
-      const shuffledCards = [...allSelectedCards]
-          .sort(() => Math.random() - 0.5);
-  
-      return shuffledCards;
-  });
+        const shuffledCards = [...allSelectedCards]
+            .sort(() => Math.random() - 0.5);
+    
+        return shuffledCards;
+    });
+  }
+
+
+  const handleRandomCard = () => {
+    const card = getRandomCardFromDeck();
+    
+    //no card in the deck
+    if(!card) return null;
+
+    setSelectedCard(card);
+
+    setAllSelectedCards(selectedCards => {
+      return [...selectedCards, card];
+    });
+
+    setDeckOfCards(deckOfCards => {
+      return deckOfCards.filter(c => c != card);
+    })
+    
   }
 
   return (
     <div className="layout">
       <div className="button-container">
-        <button onClick={randomCardGenerator}>WildCard</button>
+        <button onClick={handleWildCard}>WildCard</button>
         <button onClick={() => dealCards(5)}>Deal 5</button>
         <button onClick={() => dealCards(7)}>Deal 7</button>
         <button onClick={() => {
@@ -134,12 +153,14 @@ function DeckofCard() {
    
 
       {deckOfCards.length <= 0 ? <p>No card Remaining</p> : <></>}
+
+      {<Card onClick={handleRandomCard} suit="" value="Card Deck" />}
+
       {selectedCard && 
         <div>
           <p>You selected:</p>
-          <Card type={selectedCard}></Card>
+          <Card suit={selectedCard.suit} value={selectedCard.value} picked={true}></Card>
         </div>}
-      {!selectedCard && <Card suit="" value="Card" />}
       <div className="cards-container">
         {allSelectedCards.map((c, i) => 
           <Card key={i} picked={c === pickedCard} onClick={() => handlePickingCard(c)} suit={c.suit} value={c.value}></Card>
